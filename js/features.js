@@ -186,7 +186,19 @@
 
 (function() {
     var KEY = 'keepaliveAudioEnabled';
-    var SRC = 'https://files.catbox.moe/0tbopr.mp3';
+   var SRC = (function(){
+    var sr = 8000, n = 80, size = 44 + n * 2;
+    var buf = new ArrayBuffer(size), dv = new DataView(buf);
+    function w(o, s){ for (var i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i)); }
+    w(0, 'RIFF'); dv.setUint32(4, size - 8, true); w(8, 'WAVE');
+    w(12, 'fmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true);
+    dv.setUint16(22, 1, true); dv.setUint32(24, sr, true);
+    dv.setUint32(28, sr * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true);
+    w(36, 'data'); dv.setUint32(40, n * 2, true);
+    var b = new Uint8Array(buf), s = '';
+    for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]);
+    return 'data:audio/wav;base64,' + btoa(s);
+})();
     var _audio = null;
     var _unlockBound = false;
 
