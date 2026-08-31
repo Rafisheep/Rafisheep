@@ -186,7 +186,7 @@
 
 (function() {
     var KEY = 'keepaliveAudioEnabled';
-    var SRC = 'baohuo.mp4';
+    var SRC = 'quiet.wav';
     var _audio = null;
     var _unlockBound = false;
 
